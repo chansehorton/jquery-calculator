@@ -9,8 +9,17 @@ $( document ).ready(function() {
   buttons.on('click', function(e) {
     if (e.target !== e.currentTarget) {
       var clickedItem = e.target;
-
-      calcScreen.html(calcScreen.html() + clickedItem.innerText);
+      switch(clickedItem.innerText) {
+        case 'C':
+          calcScreen.html('');
+          break;
+        case '=':
+          calcScreen.html(eval(calcScreen.html()));
+          break;
+        default:
+          calcScreen.html(calcScreen.html() + clickedItem.innerText);
+          break;
+      };
     };
   });
 });
