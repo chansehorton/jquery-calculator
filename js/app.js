@@ -17,7 +17,39 @@ $.fn.calculate = function(screenStr) {
   } else if ($.isNumeric(screenStr[(screenStr.length)-1])!==true) {
     calcScreen.html('Error');
   } else {
-    calcScreen.html(eval(screenStr));
+    var nums = screenStr.split(/[+*/-]/g);
+    var operators = screenStr.split(/\d+/g);
+    var finalOperators = [];
+    for (var i=0;i<operators.length;i++) {
+      if (operators[i] !== "") {
+        finalOperators.push(operators[i]);
+      };
+    };
+    if (finalOperators.length<=1) {
+      for (var j=0;j<nums.length;j++) {
+        nums[j] = parseInt(nums[j]);
+      };
+      for (var k=0;k<finalOperators.length;k++) {
+        switch(finalOperators[k]) {
+          case '*':
+          calcScreen.html(nums[0]*nums[1]);
+          break;
+          case '/':
+          calcScreen.html(nums[0]/nums[1]);
+          break;
+          case '+':
+          calcScreen.html(nums[0]+nums[1]);
+          break;
+          case '-':
+          calcScreen.html(nums[0]-nums[1]);
+          break;
+          default:
+          break;
+        };
+      };
+    } else {
+      calcScreen.html('Error');
+    };
   };
 };
 
@@ -29,30 +61,32 @@ $( document ).ready(function() {
       var clickedItem = e.target;
       var calcScrCurrent = calcScreen.html();
 
-      switch(clickedItem.innerText) {
-        case 'Error':
-          break;
-        case 'C':
+      if (calcScrCurrent !== 'Error') {
+        switch(clickedItem.innerText) {
+          case 'C':
           calcScreen.html('');
           break;
-        case '=':
+          case '=':
           $.fn.calculate(calcScrCurrent);
           break;
-        case 'x':
+          case 'x':
           $.fn.noDblOps(calcScrCurrent, '*');
           break;
-        case '÷':
+          case '÷':
           $.fn.noDblOps(calcScrCurrent, '/');
           break;
-        case '+':
+          case '+':
           $.fn.noDblOps(calcScrCurrent, '+');
           break;
-        case '-':
+          case '-':
           $.fn.noDblOps(calcScrCurrent, '-');
           break;
-        default:
+          default:
           calcScreen.html(calcScrCurrent + clickedItem.innerText);
           break;
+        };
+      } else if (clickedItem.innerText === 'C') {
+        calcScreen.html('');
       };
     };
   });
